@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "144581570958",
+    "project_id": "smartgarbaging",
+    "storage_bucket": "smartgarbaging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144581570958:android:ff14f2104b1610d9cab4df",
+        "android_client_info": {
+          "package_name": "com.example.smartgarbaging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144581570958-l0c0qe8ia33ognakck9fcreflbsvhod6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPukpDPSjB0GS1-APJoF7EIo2g-BE3fPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144581570958-l0c0qe8ia33ognakck9fcreflbsvhod6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
