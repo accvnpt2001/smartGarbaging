@@ -101,14 +101,20 @@ class _DetailBinState extends State<DetailBin> {
                   ),
                   JText(
                     pin: EdgeInsets.symmetric(vertical: 10.h),
-                    text: "75%",
+                    text: "${widget.binData?.total[0]}%",
                     fontSize: 30.sp,
                     fontWeight: FontWeight.bold,
-                    textColor: Colors.redAccent,
+                    textColor: widget.binData!.total[0] < 50 ? AppColors.green2 : Colors.redAccent,
                   ),
                 ],
               ),
-              Expanded(child: ChartView())
+              Expanded(
+                  child: ChartView(
+                organics: widget.binData!.organics,
+                inorganics: widget.binData!.inorganics,
+                recyclables: widget.binData!.recyclables,
+                total: widget.binData!.total,
+              ))
             ],
           ),
         ),
