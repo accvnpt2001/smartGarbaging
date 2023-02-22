@@ -7,9 +7,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smartgarbaging/common/assets/app_colors.dart';
 import 'package:smartgarbaging/common/assets/app_images.dart';
 import 'package:smartgarbaging/screen/detail_bin/detail_bin.dart';
-import 'package:smartgarbaging/screen/model/bin_model.dart';
 import 'package:smartgarbaging/service/getlocator.dart';
 import 'package:smartgarbaging/util/j_text.dart';
+
+import '../../models/bin.dart';
 
 class TruckController extends GetxController {
   Map<String, Marker> markerList = {};
@@ -75,9 +76,9 @@ class TruckController extends GetxController {
       addMarker(
         element.id,
         LatLng(element.lat, element.long),
-        element.urlImage,
-        element.description,
-        element.percentRub,
+        element.imageUrl,
+        element.address,
+        element.total[0],
       );
     });
     currentLocation = await Get.find<GetLocatorService>().getCurrentLocation();
@@ -158,7 +159,7 @@ class TruckController extends GetxController {
                       onTap: () {
                         Get.to(
                             DetailBin(
-                              binDetail: fakedata[int.parse(id) - 1],
+                              binData: fakedata[int.parse(id) - 1],
                             ),
                             transition: Transition.rightToLeft,
                             duration: const Duration(milliseconds: 500));
@@ -185,47 +186,4 @@ class TruckController extends GetxController {
   }
 }
 
-List<BinModel> fakedata = [
-  BinModel(
-      id: "1",
-      lat: 20.9845183,
-      long: 105.8415858,
-      urlImage: "https://media.timeout.com/images/105910674/750/422/image.jpg",
-      percentRub: 60,
-      description: "12 Ngo Quyen streest, Hoang Mai, HN"),
-  BinModel(
-      id: "2",
-      lat: 20.984858,
-      long: 105.8429693,
-      urlImage: "https://media.timeout.com/images/105910674/750/422/image.jpg",
-      percentRub: 30,
-      description: "12 Ngo Quyen streest, Hoang Mai, HN"),
-  BinModel(
-      id: "3",
-      lat: 20.985254,
-      long: 105.8423843,
-      urlImage: "https://media.timeout.com/images/105910674/750/422/image.jpg",
-      percentRub: 90,
-      description: "12 Ngo Quyen streest, Hoang Mai, HN"),
-  BinModel(
-      id: "4",
-      lat: 20.985606,
-      long: 105.8395094,
-      urlImage: "https://media.timeout.com/images/105910674/750/422/image.jpg",
-      percentRub: 15,
-      description: "12 Ngo Quyen streest, Hoang Mai, HN"),
-  BinModel(
-      id: "5",
-      lat: 20.9877,
-      long: 105.8386511,
-      urlImage: "https://poipic3.coccoc.com/450x230/poi/previews/20181004/26650-fdd5c2f12e21ef7a59ed467fd36a2641.jpg",
-      percentRub: 59,
-      description: "Cổng trường Đại học Kinh tế quốc dân"),
-  BinModel(
-      id: "6",
-      lat: 20.9862375,
-      long: 105.8398205,
-      urlImage: "http://giadinh.mediacdn.vn/2016/dai-hoc-bach-khoa-ha-noi-1478074618422.jpg",
-      percentRub: 27,
-      description: "Cổng trường Đại học Bách Khoa Hà Nội"),
-];
+List<Bin> fakedata = [];

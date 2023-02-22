@@ -46,12 +46,12 @@ class Bin {
       name: map['name'] as String,
       address: map['address'] as String,
       imageUrl: map['image'] as String,
-      lat: map['lat'] as double,
-      long: map['long'] as double,
-      organics: map['organics'] as List<int>,
-      inorganics: map['inorganics'] as List<int>,
-      recyclables: map['recyclables'] as List<int>,
-      total: map['total'] as List<int>,
+      lat: map['lat'].toDouble(),
+      long: map['long'].toDouble(),
+      organics: map['organics'].cast<int>(),
+      inorganics: map['inorganics'].cast<int>(),
+      recyclables: map['recyclables'].cast<int>(),
+      total: map['total'].cast<int>(),
     );
   }
 

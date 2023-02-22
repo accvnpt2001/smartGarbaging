@@ -8,10 +8,10 @@ import 'package:smartgarbaging/service/getlocator.dart';
 
 void main() async {
   Get.put(GetLocatorService());
+  Get.put(FirebaseMessagingService());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseMessagingService().initService();
-  Get.put(ListBinController());
   // Get.put(TruckController());
   runApp(const MyApp());
 }

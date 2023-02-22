@@ -9,6 +9,8 @@ import 'package:smartgarbaging/screen/home/select_bin_view.dart';
 import 'package:smartgarbaging/screen/list_bin/list_bin.dart';
 import 'package:smartgarbaging/screen/splash/splash_view.dart';
 
+import '../screen/list_bin/list_bin_binding.dart';
+
 class AppRoutes {
   AppRoutes._();
   static final routes = [
@@ -37,6 +39,7 @@ class AppRoutes {
     GetPage(
       name: RouterNames.LIST_BIN,
       page: () => ListBin(),
+      binding: ListBinBinding(),
     ),
     GetPage(
       name: RouterNames.SELECT_ONE_BIN_VIEW,

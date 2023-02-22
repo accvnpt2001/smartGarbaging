@@ -5,15 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:smartgarbaging/common/assets/app_colors.dart';
-import 'package:smartgarbaging/screen/model/bin_model.dart';
+import 'package:smartgarbaging/models/bin.dart';
 import 'package:smartgarbaging/util/chart.dart';
 import 'package:smartgarbaging/util/j_text.dart';
 
 class DetailBin extends StatefulWidget {
-  BinModel? binDetail;
+  Bin? binData;
   DetailBin({
     Key? key,
-    this.binDetail,
+    this.binData,
   }) : super(key: key);
 
   @override
@@ -63,7 +63,7 @@ class _DetailBinState extends State<DetailBin> {
                 ],
               ),
               JText(
-                text: widget.binDetail?.description,
+                text: widget.binData?.address ?? "no infor",
                 textColor: AppColors.grey1,
                 fontSize: 15.sp,
                 pin: EdgeInsets.symmetric(vertical: 10.h),
@@ -81,7 +81,7 @@ class _DetailBinState extends State<DetailBin> {
                               image: DecorationImage(image: imageProvider, fit: BoxFit.fitWidth),
                             ),
                           ),
-                      imageUrl: widget.binDetail!.urlImage,
+                      imageUrl: widget.binData?.imageUrl ?? "",
                       errorWidget: (context, url, error) => Container()),
                 ),
               ),
