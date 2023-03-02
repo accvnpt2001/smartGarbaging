@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:smartgarbaging/screen/auth/login_view.dart';
 import 'package:smartgarbaging/screen/detail_bin/detail_bin.dart';
 import 'package:smartgarbaging/screen/garbage_truck/garbage_truck.dart';
-import 'package:smartgarbaging/screen/garbage_truck/truck_controller.dart';
 import 'package:smartgarbaging/screen/home/home_binding.dart';
 import 'package:smartgarbaging/screen/home/home_view.dart';
 import 'package:smartgarbaging/screen/home/select_bin_view.dart';
@@ -41,10 +40,6 @@ class AppRoutes {
       page: () => ListBin(),
       binding: ListBinBinding(),
     ),
-    GetPage(
-      name: RouterNames.SELECT_ONE_BIN_VIEW,
-      page: () => SelectOneBinView(),
-    )
   ];
 }
 

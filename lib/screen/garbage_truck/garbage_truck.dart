@@ -19,6 +19,12 @@ class _GarbageTruckState extends State<GarbageTruck> {
   TruckController truckController = Get.find<TruckController>();
 
   @override
+  void dispose() {
+    truckController.onClose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
@@ -38,8 +44,8 @@ class _GarbageTruckState extends State<GarbageTruck> {
                     )
                   : GoogleMap(
                       initialCameraPosition: CameraPosition(
-                        target:
-                            LatLng(truckController.currentLocation.latitude, truckController.currentLocation.longitude),
+                        target: LatLng(truckController.currentLocation.value.latitude,
+                            truckController.currentLocation.value.longitude),
                         zoom: 17,
                       ),
                       onMapCreated: (controller) {
@@ -47,12 +53,13 @@ class _GarbageTruckState extends State<GarbageTruck> {
                       },
                       markers: truckController.markerList.values.toSet(),
                       circles: {
-                        const Circle(
-                            circleId: CircleId("1"),
-                            center: LatLng(20.985365, 105.8427593),
+                        Circle(
+                            circleId: const CircleId("1"),
+                            center: LatLng(truckController.currentLocation.value.latitude,
+                                truckController.currentLocation.value.longitude),
                             radius: 430,
                             strokeWidth: 2,
-                            fillColor: Color.fromARGB(65, 162, 255, 167))
+                            fillColor: const Color.fromARGB(65, 162, 255, 167))
                       },
                     ),
             )));

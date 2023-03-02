@@ -8,10 +8,10 @@ class Bin {
   String imageUrl;
   double lat;
   double long;
-  List<int> organics;
-  List<int> inorganics;
-  List<int> recyclables;
-  List<int> total;
+  int organic;
+  int inorganic;
+  int recyclable;
+  int total;
   Bin({
     required this.id,
     required this.name,
@@ -19,9 +19,9 @@ class Bin {
     required this.imageUrl,
     required this.lat,
     required this.long,
-    required this.organics,
-    required this.inorganics,
-    required this.recyclables,
+    required this.organic,
+    required this.inorganic,
+    required this.recyclable,
     required this.total,
   });
 
@@ -33,10 +33,9 @@ class Bin {
       'image': imageUrl,
       'lat': lat,
       'long': long,
-      'organics': organics,
-      'inorganics': inorganics,
-      'recyclables': recyclables,
-      'total': total,
+      'organics': organic,
+      'inorganics': inorganic,
+      'recyclables': recyclable,
     };
   }
 
@@ -48,10 +47,25 @@ class Bin {
       imageUrl: map['image'] as String,
       lat: map['lat'].toDouble(),
       long: map['long'].toDouble(),
-      organics: map['organics'].cast<int>(),
-      inorganics: map['inorganics'].cast<int>(),
-      recyclables: map['recyclables'].cast<int>(),
-      total: map['total'].cast<int>(),
+      organic: map['organic'],
+      inorganic: map['inorganic'],
+      recyclable: map['recyclable'],
+      total: (map['organic'] + map['inorganic'] + map['recyclable']) ~/ 3,
+    );
+  }
+
+  factory Bin.fromMapUserId(Map<String, dynamic> map) {
+    return Bin(
+      id: map['binId'] as String,
+      name: map['name'] as String,
+      address: map['address'] as String,
+      imageUrl: map['image'] as String,
+      lat: map['lat'].toDouble(),
+      long: map['long'].toDouble(),
+      organic: map['organic'],
+      inorganic: map['inorganic'],
+      recyclable: map['recyclable'],
+      total: (map['organic'] + map['inorganic'] + map['recyclable']) ~/ 3,
     );
   }
 

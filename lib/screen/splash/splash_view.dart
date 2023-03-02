@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:smartgarbaging/service/notify_helper.dart';
+import 'package:smartgarbaging/util/app_routes.dart';
 
 import '../../common/assets/app_images.dart';
 import '../auth/login_view.dart';
@@ -63,6 +65,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   nextScreent() {
     NotificationHelper.configFCM();
-    Get.to(IntroScreen());
+    var storage = GetStorage();
+    if (storage.read("firstTimeUseApp") == null) {
+      Get.to(IntroScreen());
+      storage.write("firstTimeUseApp", 1);
+    } else if (storage.read("token") == null) {
+      Get.toNamed(RouterNames.LOGIN);
+    } else {
+      Get.toNamed(RouterNames.HOME);
+    }
   }
 }

@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:smartgarbaging/common/assets/app_colors.dart';
 import 'package:smartgarbaging/screen/garbage_truck/truck_controller.dart';
 import 'package:smartgarbaging/screen/home/home_controller.dart';
@@ -12,102 +15,94 @@ import '../../common/assets/app_images.dart';
 import '../../util/j_image.dart';
 import '../../util/j_text.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  DateTime? currentBackPressTime;
+  HomeController homeController = Get.find<HomeController>();
+
+  var userName = GetStorage().read("accountName");
+
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              height: Get.height / 3,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(AppImages.BACKGROUND_HOME),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: SafeArea(
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Container(
+                height: Get.height / 3,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(AppImages.BACKGROUND_HOME),
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
-              child: Column(
-                children: [
-                  SizedBox(height: 50.h),
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5.h),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white.withOpacity(0.4),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                child: Column(
+                  children: [
+                    SizedBox(height: 50.h),
+                    Container(
+                      padding: EdgeInsets.only(bottom: 5.h),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.white.withOpacity(0.4),
                       ),
-                      child: blockProfile(),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 5.h),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white.withOpacity(0.4),
+                        ),
+                        child: blockProfile(),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10.h),
-                  JText(
-                    width: Get.width,
-                    textAlign: TextAlign.start,
-                    text: "Let's collect garbage",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20.sp,
-                  ),
-                  service(context),
-                  JText(
-                    margin: EdgeInsets.only(top: 10.h),
-                    width: Get.width,
-                    textAlign: TextAlign.start,
-                    text: "My smart bin",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20.sp,
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: ((context, index) => itemUserBin()),
-                      itemCount: 10,
+                    SizedBox(height: 10.h),
+                    JText(
+                      width: Get.width,
+                      textAlign: TextAlign.start,
+                      text: "Let's collect garbage",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.sp,
                     ),
-                  )
-                ],
-              ),
-            )
-          ],
+                    service(context),
+                    JText(
+                      margin: EdgeInsets.only(top: 10.h),
+                      width: Get.width,
+                      textAlign: TextAlign.start,
+                      text: "My smart bin",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.sp,
+                    ),
+                    Obx(() => homeController.loadingUserBin.value
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                homeController.loadListUserBin();
+                              },
+                              child: ListView.builder(
+                                itemBuilder: ((context, index) => itemUserBin(homeController.listUserBin[index])),
+                                itemCount: homeController.listUserBin.length,
+                              ),
+                            ),
+                          ))
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget searchBox() {
-    return Container(
-      margin: EdgeInsets.only(top: 20.h),
-      padding: EdgeInsets.symmetric(horizontal: 5.w),
-      width: Get.width * 0.7,
-      height: 40.h,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey,
-              spreadRadius: 0,
-              blurRadius: 2,
-              offset: Offset(0, 0),
-            )
-          ],
-          borderRadius: BorderRadius.circular(10)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Icon(
-            Icons.search_rounded,
-            size: 20.sp,
-            color: AppColors.grey1,
-          )
-        ],
       ),
     );
   }
@@ -125,28 +120,30 @@ class HomePage extends StatelessWidget {
               width: 70.w,
             ),
           ),
-          Container(
-            padding: EdgeInsets.all(10.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                JText(
-                  pin: EdgeInsets.symmetric(vertical: 2.h),
-                  text: "UserName",
-                  fontSize: 20.sp,
-                ),
-                JText(
-                  pin: EdgeInsets.only(top: 5.h),
-                  text: "09223828",
-                  fontWeight: FontWeight.w500,
-                  textColor: Colors.white,
-                  fontSize: 15.sp,
-                ),
-              ],
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(left: 10.w, top: 10.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  JText(
+                    pin: EdgeInsets.symmetric(vertical: 2.h),
+                    text: "$userName",
+                    fontSize: 18.sp,
+                  ),
+                  JText(
+                    pin: EdgeInsets.only(top: 5.h),
+                    text: "09223828",
+                    fontWeight: FontWeight.w500,
+                    textColor: Colors.white,
+                    fontSize: 15.sp,
+                  ),
+                ],
+              ),
             ),
           ),
           InkWell(
-            onTap: (() => Get.toNamed(RouterNames.LOGIN)),
+            onTap: () => Get.find<HomeController>().logout(),
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
               child: JImage(
@@ -320,5 +317,21 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  Future<bool> _onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(
+          msg: "Tap again to exit",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      SystemNavigator.pop();
+    }
+    return Future.value(false);
   }
 }

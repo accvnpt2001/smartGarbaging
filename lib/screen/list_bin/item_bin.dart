@@ -9,6 +9,7 @@ import 'package:smartgarbaging/common/assets/app_colors.dart';
 import 'package:smartgarbaging/common/assets/app_images.dart';
 import 'package:smartgarbaging/models/bin.dart';
 import 'package:smartgarbaging/screen/detail_bin/detail_bin.dart';
+import 'package:smartgarbaging/screen/detail_bin/detail_bin_controller.dart';
 import 'package:smartgarbaging/util/app_routes.dart';
 import 'package:smartgarbaging/util/j_image.dart';
 
@@ -24,7 +25,12 @@ class ItemBin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        if (Get.isRegistered<DetailBinController>()) {
+          Get.delete<DetailBinController>();
+        }
+        DetailBinController controller = Get.put(DetailBinController());
+        await controller.getDataTrash(binData.id);
         Get.to(DetailBin(binData: binData));
       },
       child: Container(
@@ -62,11 +68,14 @@ class ItemBin extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                   child: Center(
-                    child: JText(
-                      text: binData.name,
-                      fontSize: 14.sp,
-                      textColor: Colors.orangeAccent,
-                      fontWeight: FontWeight.bold,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: JText(
+                        text: binData.name,
+                        fontSize: 14.sp,
+                        textColor: Colors.orangeAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -81,12 +90,12 @@ class ItemBin extends StatelessWidget {
                 LinearPercentIndicator(
                   width: 150.w,
                   lineHeight: 15.h,
-                  percent: binData.total[0] / 100,
+                  percent: (binData.total > 100 ? 100 : binData.total) / 100,
                   barRadius: Radius.circular(10.r),
                   backgroundColor: AppColors.green1,
                   animation: true,
                   center: JText(
-                    text: "${binData.total[0]}%",
+                    text: "${binData.total > 100 ? 100 : binData.total}%",
                     fontSize: 12.sp,
                     textColor: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -110,8 +119,12 @@ class ItemBin extends StatelessWidget {
                         image: DecorationImage(image: imageProvider, fit: BoxFit.fitWidth),
                       ),
                     ),
-                    imageUrl: "https://media.timeout.com/images/105910674/750/422/image.jpg",
-                    errorWidget: ((context, url, error) => Container()),
+                    imageUrl: binData.imageUrl,
+                    errorWidget: ((context, url, error) => Center(
+                            child: JText(
+                          text: "No Image Available!",
+                          fontSize: 10.sp,
+                        ))),
                   ),
                 ),
               ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../common/configs/configs.dart';
 import 'base_request/request_model.dart';
 
@@ -42,11 +43,8 @@ class ApiServices {
   }
 
   Future<Options> _baseOptions() async {
-    final headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'token': 'Barier ${Configs.barierToken}'
-    };
+    var token = GetStorage().read("token") ?? "";
+    final headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'token': 'Bearer $token'};
     return Options(
       validateStatus: (status) => true,
       headers: headers,

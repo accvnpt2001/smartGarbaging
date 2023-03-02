@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:smartgarbaging/screen/home/select_bin_view.dart';
 import 'package:smartgarbaging/util/app_routes.dart';
 
+import '../../models/bin.dart';
 import '../../util/j_text.dart';
 
-Widget itemUserBin() {
+Widget itemUserBin(Bin bin) {
   return InkWell(
-    onTap: () => Get.toNamed(RouterNames.SELECT_ONE_BIN_VIEW),
+    onTap: () => Get.to(SelectOneBinView(bin: bin)),
     child: Container(
       padding: EdgeInsets.all(5.h),
       height: 60.h,
@@ -40,7 +42,7 @@ Widget itemUserBin() {
             ),
             child: Center(
               child: JText(
-                text: "20",
+                text: bin.name,
                 fontSize: 16.sp,
                 textColor: Colors.orangeAccent,
                 fontWeight: FontWeight.bold,
@@ -57,7 +59,7 @@ Widget itemUserBin() {
                 fontSize: 12.sp,
               ),
               JText(
-                text: "Ngõ 23 Ngô Văn Tự, đường Hoàng Quốc Việt",
+                text: bin.address,
                 width: Get.width * 0.63,
                 pin: EdgeInsets.symmetric(vertical: 2.h),
                 lineSpacing: 1.2,
@@ -74,7 +76,7 @@ Widget itemUserBin() {
                 size: 25.h,
               ),
               JText(
-                text: "90%",
+                text: "${bin.total > 100 ? 100 : bin.total}%",
                 fontSize: 10.h,
                 fontWeight: FontWeight.bold,
               )

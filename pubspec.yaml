@@ -14,7 +14,7 @@ dependencies:
   flutter_screenutil: ^5.6.0
   introduction_screen: ^3.1.2
   cached_network_image: ^3.2.3
-  google_maps_flutter: ^2.2.3
+  google_maps_flutter: ^2.2.4
   geolocator: ^9.0.2
   location: ^4.4.0
   syncfusion_flutter_charts: ^20.4.42
@@ -27,6 +27,7 @@ dependencies:
   get_storage: ^2.0.3
   dio: ^5.0.0
   flutter_easyloading: ^3.0.5
+  fluttertoast: ^8.2.1
   
 
 dev_dependencies:

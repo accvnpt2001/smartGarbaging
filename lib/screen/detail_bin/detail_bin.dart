@@ -5,8 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:smartgarbaging/common/assets/app_colors.dart';
+import 'package:smartgarbaging/common/assets/app_images.dart';
 import 'package:smartgarbaging/models/bin.dart';
+import 'package:smartgarbaging/screen/detail_bin/detail_bin_controller.dart';
 import 'package:smartgarbaging/util/chart.dart';
+import 'package:smartgarbaging/util/j_image.dart';
 import 'package:smartgarbaging/util/j_text.dart';
 
 class DetailBin extends StatefulWidget {
@@ -21,6 +24,14 @@ class DetailBin extends StatefulWidget {
 }
 
 class _DetailBinState extends State<DetailBin> {
+  DetailBinController controller = Get.find<DetailBinController>();
+
+  @override
+  void initState() {
+    controller.checkFollowBin(widget.binData!.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,24 +53,33 @@ class _DetailBinState extends State<DetailBin> {
                     pin: EdgeInsets.only(top: 10.h),
                   ),
                   InkWell(
-                    onTap: () {},
-                    child: Container(
-                      width: 70.w,
-                      height: 25.h,
-                      margin: EdgeInsets.symmetric(horizontal: 10.w),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      child: Center(
-                        child: JText(
-                          text: "Follow",
-                          textColor: Colors.white,
-                          fontSize: 16.sp,
+                      onTap: () {
+                        controller.isFollowed.value
+                            ? controller.onClickUnFollowBin(widget.binData!.id)
+                            : controller.onClickFollowBin(widget.binData!.id);
+                      },
+                      child: Obx(
+                        () => Container(
+                          width: 70.w,
+                          height: 25.h,
+                          margin: EdgeInsets.symmetric(horizontal: 10.w),
+                          padding: EdgeInsets.symmetric(horizontal: 5.w),
+                          decoration: BoxDecoration(
+                            color: controller.isFollowed.value ? Colors.lightGreen : Colors.red,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: Center(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: JText(
+                                text: controller.isFollowed.value ? "Followed" : "Follow",
+                                textColor: Colors.white,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  )
+                      ))
                 ],
               ),
               JText(
@@ -82,7 +102,11 @@ class _DetailBinState extends State<DetailBin> {
                             ),
                           ),
                       imageUrl: widget.binData?.imageUrl ?? "",
-                      errorWidget: (context, url, error) => Container()),
+                      errorWidget: (context, url, error) => Center(
+                              child: JText(
+                            text: "No Image Available!",
+                            fontSize: 10.sp,
+                          ))),
                 ),
               ),
               Divider(
@@ -101,19 +125,19 @@ class _DetailBinState extends State<DetailBin> {
                   ),
                   JText(
                     pin: EdgeInsets.symmetric(vertical: 10.h),
-                    text: "${widget.binData?.total[0]}%",
+                    text: "${widget.binData?.total}%",
                     fontSize: 30.sp,
                     fontWeight: FontWeight.bold,
-                    textColor: widget.binData!.total[0] < 50 ? AppColors.green2 : Colors.redAccent,
+                    textColor: widget.binData!.total < 50 ? AppColors.green2 : Colors.redAccent,
                   ),
                 ],
               ),
               Expanded(
                   child: ChartView(
-                organics: widget.binData!.organics,
-                inorganics: widget.binData!.inorganics,
-                recyclables: widget.binData!.recyclables,
-                total: widget.binData!.total,
+                organics: controller.organics,
+                inorganics: controller.inOrganics,
+                recyclables: controller.recyclables,
+                total: controller.total,
               ))
             ],
           ),

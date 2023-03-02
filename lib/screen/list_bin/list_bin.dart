@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:smartgarbaging/common/assets/app_colors.dart';
 import 'package:smartgarbaging/screen/list_bin/item_bin.dart';
@@ -9,15 +12,20 @@ import 'package:smartgarbaging/util/j_text.dart';
 
 import '../../models/bin.dart';
 
-class ListBin extends StatelessWidget {
+class ListBin extends StatefulWidget {
   const ListBin({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var controller = Get.find<ListBinController>();
+  State<ListBin> createState() => _ListBinState();
+}
 
+class _ListBinState extends State<ListBin> {
+  var controller = Get.find<ListBinController>();
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Material(
         child: Scaffold(

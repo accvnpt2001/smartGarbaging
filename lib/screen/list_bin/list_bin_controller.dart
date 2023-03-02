@@ -19,7 +19,7 @@ class ListBinController extends GetxController {
   void onReady() async {
     isLoading.value = true;
     EasyLoading.show(status: "Loading bins ....");
-    List<dynamic> response = await ApiServices().request(RequestGetAllBin('')) as List<dynamic>;
+    var response = await ApiServices().request(RequestGetAllBin(''));
     response.forEach((e) {
       listbin.add(Bin.fromMap(e));
     });

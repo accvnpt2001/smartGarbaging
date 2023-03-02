@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -23,7 +24,7 @@ class FirebaseMessagingService extends GetxService {
   );
 
   Future<void> initService() async {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
@@ -42,6 +43,7 @@ class FirebaseMessagingService extends GetxService {
 
     await FirebaseMessaging.instance.getToken().then((value) {
       print('Generated fcm token: $value');
+      GetStorage().write("deviceId", value);
       // LocalAppData.saveFcmToken(value);
     });
   }

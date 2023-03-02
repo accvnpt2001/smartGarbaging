@@ -45,40 +45,35 @@ class _ChartView2State extends State<ChartView> {
   }
 
   void setDataForChart() {
-    int today = DateTime.now().day;
-    int month = DateTime.now().month;
-    for (var e in widget.organics) {
-      if (widget.organics.indexOf(e) == 0) {
-        chartOrganics.add(ChartData("Today", e));
+    for (int i = 0; i < widget.organics.length; i++) {
+      if (i == 0) {
+        chartOrganics.add(ChartData("Today", widget.organics[i]));
       } else {
-        chartOrganics.add(ChartData("${today - widget.organics.indexOf(e)}/$month", e));
+        chartOrganics.add(ChartData(convertTime(i), widget.organics[i]));
       }
     }
     chartOrganics = List.from(chartOrganics.reversed);
-
-    for (var e in widget.inorganics) {
-      if (widget.inorganics.indexOf(e) == 0) {
-        chartInorganics.add(ChartData("Today", e));
+    for (int i = 0; i < widget.organics.length; i++) {
+      if (i == 0) {
+        chartInorganics.add(ChartData("Today", widget.inorganics[i]));
       } else {
-        chartInorganics.add(ChartData("${today - widget.inorganics.indexOf(e)}/$month", e));
+        chartInorganics.add(ChartData(convertTime(i), widget.inorganics[i]));
       }
     }
     chartInorganics = List.from(chartInorganics.reversed);
-
-    for (var e in widget.recyclables) {
-      if (widget.recyclables.indexOf(e) == 0) {
-        chartRecyclables.add(ChartData("Today", e));
+    for (int i = 0; i < widget.organics.length; i++) {
+      if (i == 0) {
+        chartRecyclables.add(ChartData("Today", widget.recyclables[i]));
       } else {
-        chartRecyclables.add(ChartData("${today - widget.recyclables.indexOf(e)}/$month", e));
+        chartRecyclables.add(ChartData(convertTime(i), widget.recyclables[i]));
       }
     }
     chartRecyclables = List.from(chartRecyclables.reversed);
-
-    for (var e in widget.total) {
-      if (widget.total.indexOf(e) == 0) {
-        chartTotal.add(ChartData("Today", e));
+    for (int i = 0; i < widget.organics.length; i++) {
+      if (i == 0) {
+        chartTotal.add(ChartData("Today", widget.total[i]));
       } else {
-        chartTotal.add(ChartData("${today - widget.total.indexOf(e)}/$month", e));
+        chartTotal.add(ChartData(convertTime(i), widget.total[i]));
       }
     }
     chartTotal = List.from(chartTotal.reversed);
@@ -100,7 +95,6 @@ class _ChartView2State extends State<ChartView> {
                     isVisible: true,
                     position: LegendPosition.bottom,
                     title: LegendTitle(
-                        text: 'Note',
                         textStyle: const TextStyle(
                             color: Colors.red, fontSize: 15, fontStyle: FontStyle.italic, fontWeight: FontWeight.w900)),
                   ),
@@ -111,20 +105,20 @@ class _ChartView2State extends State<ChartView> {
                   primaryXAxis: CategoryAxis(
                       maximumLabels: 15,
                       labelPosition: ChartDataLabelPosition.outside,
-                      interactiveTooltip: InteractiveTooltip(enable: true, color: Colors.blue)),
-                  primaryYAxis: NumericAxis(maximum: 100, interval: 20),
+                      interactiveTooltip: const InteractiveTooltip(enable: true, color: Colors.blue)),
+                  primaryYAxis: NumericAxis(),
                   // loadMoreIndicatorBuilder: (BuildContext context, ChartSwipeDirection direction) =>
                   //     getLoadMoreViewBuilder(context, direction),
                   trackballBehavior: TrackballBehavior(enable: true),
                   tooltipBehavior: TooltipBehavior(enable: true),
                   series: <CartesianSeries>[
                     // Render column series
-                    ColumnSeries<ChartData, String>(
+                    LineSeries<ChartData, String>(
                         onRendererCreated: (ChartSeriesController controller) {
                           seriesController1 = controller;
                         },
                         name: "Organics",
-                        borderWidth: 2,
+                        // borderWidth: 2,
                         color: Color.fromARGB(255, 21, 165, 132),
                         //borderRadius: BorderRadius.circular(20),
                         enableTooltip: true,
@@ -132,15 +126,27 @@ class _ChartView2State extends State<ChartView> {
                         dataLabelMapper: (x, y) => x.x,
                         xValueMapper: (ChartData data, _) => data.x,
                         yValueMapper: (ChartData data, _) => data.y),
-                    SplineSeries<ChartData, String>(
+                    LineSeries<ChartData, String>(
                         onRendererCreated: (ChartSeriesController controller) {
                           seriesController2 = controller;
                         },
                         name: "Inorganics",
-                        color: Color.fromARGB(255, 249, 80, 8),
+                        color: Colors.red,
                         //borderRadius: BorderRadius.circular(20),
                         enableTooltip: true,
                         dataSource: chartInorganics,
+                        dataLabelMapper: (x, y) => x.x,
+                        xValueMapper: (ChartData data, _) => data.x,
+                        yValueMapper: (ChartData data, _) => data.y),
+                    LineSeries<ChartData, String>(
+                        onRendererCreated: (ChartSeriesController controller) {
+                          seriesController2 = controller;
+                        },
+                        name: "Recyclables",
+                        color: Colors.lightGreen,
+                        //borderRadius: BorderRadius.circular(20),
+                        enableTooltip: true,
+                        dataSource: chartRecyclables,
                         dataLabelMapper: (x, y) => x.x,
                         xValueMapper: (ChartData data, _) => data.x,
                         yValueMapper: (ChartData data, _) => data.y),
@@ -148,7 +154,7 @@ class _ChartView2State extends State<ChartView> {
                 ),
                 SizedBox(height: 50.h),
                 SfCartesianChart(
-                  title: ChartTitle(text: "Total"),
+                  title: ChartTitle(text: "Total %"),
                   legend: Legend(
                     isVisible: true,
                     position: LegendPosition.bottom,
@@ -165,19 +171,19 @@ class _ChartView2State extends State<ChartView> {
                   zoomPanBehavior: ZoomPanBehavior(
                       enablePanning: true, enablePinching: true, maximumZoomLevel: 0.5, zoomMode: ZoomMode.x),
                   primaryXAxis: CategoryAxis(),
-                  primaryYAxis: NumericAxis(),
+                  primaryYAxis: NumericAxis(title: AxisTitle(text: "%", alignment: ChartAlignment.center)),
                   // loadMoreIndicatorBuilder: (BuildContext context, ChartSwipeDirection direction) =>
                   //     getLoadMoreViewBuilder(context, direction),
                   trackballBehavior: TrackballBehavior(enable: true),
                   tooltipBehavior: TooltipBehavior(enable: true),
                   series: <CartesianSeries>[
-                    AreaSeries<ChartData, String>(
+                    ColumnSeries<ChartData, String>(
                         onRendererCreated: (ChartSeriesController controller) {
                           seriesController3 = controller;
                         },
-                        name: "Time",
-                        color: Color.fromARGB(112, 8, 157, 249),
-                        borderColor: Color.fromARGB(255, 8, 157, 249),
+                        name: "Total rubbish",
+                        color: Colors.blue,
+                        borderColor: Colors.lightBlue,
                         //borderRadius: BorderRadius.circular(20),
                         enableTooltip: true,
                         dataSource: chartTotal,
@@ -199,4 +205,27 @@ class ChartData {
   ChartData(this.x, this.y);
   final String x;
   final int? y;
+}
+
+String convertTime(int i) {
+  DateTime now = DateTime.now();
+  var a = [1, 3, 5, 7, 8, 10, 12];
+  var b = [4, 6, 9, 11];
+  int day;
+  int month;
+  if (a.contains(now.month) && now.day - i <= 0) {
+    day = now.day - i + (now.month != 3 ? 30 : 28);
+    if (now.month == 1) {
+      month = 12;
+    } else {
+      month = now.month - 1;
+    }
+  } else if (now.day - i <= 0) {
+    day = now.day - i + 31;
+    month = now.month - 1;
+  } else {
+    day = now.day - i;
+    month = now.month;
+  }
+  return "$day/$month";
 }
