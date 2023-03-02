@@ -2,20 +2,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 
 import 'package:smartgarbaging/common/assets/app_colors.dart';
-import 'package:smartgarbaging/common/configs/configs.dart';
 import 'package:smartgarbaging/models/bin.dart';
 import 'package:smartgarbaging/screen/home/select_bin_controller.dart';
 import 'package:smartgarbaging/util/bottomsheet.dart';
 
 import '../../common/assets/app_images.dart';
-import '../../service/getlocator.dart';
 import '../../util/j_text.dart';
 
 class SelectOneBinView extends StatefulWidget {

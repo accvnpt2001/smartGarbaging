@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:smartgarbaging/app_delegate.dart';
-import 'package:smartgarbaging/screen/list_bin/list_bin_controller.dart';
 import 'package:smartgarbaging/service/firebase_messing.dart';
 import 'package:smartgarbaging/service/getlocator.dart';
 
