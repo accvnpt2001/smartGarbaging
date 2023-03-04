@@ -84,10 +84,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Obx(() => homeController.loadingUserBin.value
                         ? const Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              color: AppColors.green2,
+                            ),
                           )
                         : Expanded(
                             child: RefreshIndicator(
+                              color: AppColors.green2,
                               onRefresh: () async {
                                 homeController.loadListUserBin();
                               },

@@ -100,7 +100,8 @@ class ItemBin extends StatelessWidget {
                     textColor: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
-                  progressColor: AppColors.green2,
+                  progressColor:
+                      binData.total < 80 ? (binData.total < 50 ? AppColors.green2 : Colors.yellow) : Colors.red,
                 ),
               ],
             ),

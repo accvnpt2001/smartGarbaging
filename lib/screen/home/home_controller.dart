@@ -48,6 +48,7 @@ class HomeController extends GetxController {
     response.forEach((e) {
       listUserBin.add(Bin.fromMapUserId(e));
     });
+    listUserBin.sort(((a, b) => a.total < b.total ? 1 : 0));
     listUserBin.forEach((e) {
       listIDUserBin.add(e.id);
     });

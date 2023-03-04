@@ -279,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Center(
                   child: JText(
-                text: "Back to LogIn",
+                text: "Back to Login",
                 textColor: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 12.sp,

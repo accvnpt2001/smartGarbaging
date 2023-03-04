@@ -18,6 +18,7 @@ Widget itemUserBin(Bin bin) {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: bin.total < 80 ? Colors.transparent : Colors.red),
         boxShadow: const [
           BoxShadow(
             color: Colors.black38,
@@ -74,10 +75,12 @@ Widget itemUserBin(Bin bin) {
               Icon(
                 Icons.delete_outline_rounded,
                 size: 25.h,
+                color: bin.total < 80 ? (bin.total < 50 ? Colors.green : Colors.yellow) : Colors.red,
               ),
               JText(
                 text: "${bin.total > 100 ? 100 : bin.total}%",
                 fontSize: 10.h,
+                textColor: bin.total < 80 ? (bin.total < 50 ? Colors.green : Colors.yellow) : Colors.red,
                 fontWeight: FontWeight.bold,
               )
             ],

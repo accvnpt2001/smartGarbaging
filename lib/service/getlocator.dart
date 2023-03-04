@@ -6,9 +6,15 @@ class GetLocatorService extends GetxService {
   Future getCurrentLocation() async {
     bool serviceEnable = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnable) {
-      Location location = Location();
-      bool enabled = await location.requestService();
-      if (!enabled) return Future.error("Location service is disabled!");
+      bool enabled = await Geolocator.openLocationSettings();
+      if (!enabled) {
+        return Future.error("Location service is disabled!");
+      } else {
+        bool serviceEnableCheckAgain = await Geolocator.isLocationServiceEnabled();
+        if (!serviceEnableCheckAgain) {
+          return Future.error("User is disabled service!");
+        }
+      }
     }
 
     LocationPermission permission = await Geolocator.checkPermission();

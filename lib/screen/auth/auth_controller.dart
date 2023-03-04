@@ -36,7 +36,7 @@ class AuthController extends GetxController {
     var body = {"username": account.text, "password": password.text};
     String jsonBody = json.encode(body);
     var request = RequestLogin(jsonBody);
-    EasyLoading.show();
+    EasyLoading.show(status: "Loading ...");
     var response = await ApiServices().request(request);
     if (response != "Wrong password" && response != "User not exist") {
       GetStorage().write("token", response['token']);
@@ -46,6 +46,15 @@ class AuthController extends GetxController {
       Get.toNamed(RouterNames.HOME);
     } else {
       isLoginFailed.value = true;
+      Get.snackbar(
+        "Đăng nhập thất bại",
+        "Tài khoản không tồn tại hoặc mật khẩu không chính xác",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
+        isDismissible: false,
+      );
     }
     EasyLoading.dismiss();
   }
@@ -73,7 +82,8 @@ class AuthController extends GetxController {
       Get.snackbar(
         "Đăng ký thất bại",
         "Tài khoản không tồn tại",
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.only(top: 30, left: 10, right: 10),
         isDismissible: false,
