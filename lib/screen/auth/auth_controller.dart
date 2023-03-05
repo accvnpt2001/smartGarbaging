@@ -60,14 +60,17 @@ class AuthController extends GetxController {
   }
 
   void signUpOnclick() async {
+    print("objectC");
     if (confirmPasswordRegis.text != passwordRegis.text) {
       isRegisterFailed.value = true;
       return;
     }
     var body = {"username": accountRegis.text, "password": passwordRegis.text, "isAdmin": false};
     String jsonBody = json.encode(body);
-    var request = RequestLogin(jsonBody);
+    var request = RequestRegister(jsonBody);
+    EasyLoading.show();
     var response = await ApiServices().request(request);
+    EasyLoading.dismiss();
     if (response != "User not exist") {
       Get.snackbar(
         "Wellcome ${response['username']}",

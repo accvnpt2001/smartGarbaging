@@ -45,7 +45,7 @@ class _DetailBinState extends State<DetailBin> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   JText(
-                    text: "Adress",
+                    text: "Address",
                     textColor: Colors.black54,
                     fontWeight: FontWeight.bold,
                     fontSize: 20.sp,
@@ -128,7 +128,9 @@ class _DetailBinState extends State<DetailBin> {
                     text: "${widget.binData?.total}%",
                     fontSize: 30.sp,
                     fontWeight: FontWeight.bold,
-                    textColor: widget.binData!.total < 50 ? AppColors.green2 : Colors.redAccent,
+                    textColor: widget.binData!.total < 80
+                        ? (widget.binData!.total < 50 ? Colors.green : Colors.yellow)
+                        : Colors.red,
                   ),
                 ],
               ),

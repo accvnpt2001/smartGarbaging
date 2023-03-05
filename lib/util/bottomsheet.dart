@@ -58,7 +58,7 @@ class BottomSheetCustom {
                   ),
                   JText(
                     text: "${bin.total > 100 ? 100 : bin.total}%",
-                    textColor: bin.total < 60 ? Colors.green : Colors.red,
+                    textColor: bin.total < 80 ? (bin.total < 50 ? Colors.green : Colors.yellow) : Colors.red,
                     fontWeight: FontWeight.bold,
                     fontSize: 20.sp,
                   )
